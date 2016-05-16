@@ -1,4 +1,4 @@
-CREATE  TABLE `kadai4`.`postings` (
+CREATE  TABLE `kadai4`.`contributions` (
  
  `id` INT NOT NULL AUTO_INCREMENT ,
  
