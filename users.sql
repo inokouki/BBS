@@ -18,8 +18,4 @@ CREATE  TABLE `kadai4`.`users` (
  `modified` TIMESTAMP ,
 PRIMARY KEY (`id`) ,
   
-UNIQUE INDEX `login_id_UNIQUE` (`login_id` ASC) ,
-  
-UNIQUE INDEX `branch_id_UNIQUE` (`branch_id` ASC) ,
-  
-UNIQUE INDEX `department_id_UNIQUE` (`department_id` ASC) );
+UNIQUE INDEX `login_id_UNIQUE` (`login_id` ASC) ;
