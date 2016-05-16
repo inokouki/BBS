@@ -8,8 +8,8 @@ CREATE  TABLE `kadai4`.`comments` (
  
  `modified` TIMESTAMP NULL ,
  
- `postings_id` INT NOT NULL ,
+ `contribution_id` INT NOT NULL ,
  
  PRIMARY KEY (`id`) ,
   
-UNIQUE INDEX `postings_id_UNIQUE` (`postings_id` ASC) );
+UNIQUE INDEX `contribution_id_UNIQUE` (`postings_id` ASC) );

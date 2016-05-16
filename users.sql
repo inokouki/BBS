@@ -2,22 +2,24 @@ CREATE  TABLE `kadai4`.`users` (
  
  `id` INT NOT NULL AUTO_INCREMENT ,
  
- `loginid` VARCHAR(20) NOT NULL ,
+ `login_id` VARCHAR(20) NOT NULL ,
  
  `password` VARCHAR(255) NOT NULL ,
  
  `name` VARCHAR(10) NOT NULL ,
  
- `branches_id` INT NOT NULL ,
+ `branch_id` INT(11) NOT NULL ,
  
- `departments_id` INT NOT NULL ,
+ `department_id` INT(11) NOT NULL ,
  
  `available` TINYINT NOT NULL ,
   
+ `created` TIMESTAMP ,
+ `modified` TIMESTAMP ,
 PRIMARY KEY (`id`) ,
   
-UNIQUE INDEX `loginid_UNIQUE` (`loginid` ASC) ,
+UNIQUE INDEX `login_id_UNIQUE` (`login_id` ASC) ,
   
-UNIQUE INDEX `branches_id_UNIQUE` (`branches_id` ASC) ,
+UNIQUE INDEX `branch_id_UNIQUE` (`branch_id` ASC) ,
   
-UNIQUE INDEX `departments_id_UNIQUE` (`departments_id` ASC) );
+UNIQUE INDEX `department_id_UNIQUE` (`department_id` ASC) );

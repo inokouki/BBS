@@ -12,5 +12,5 @@ CREATE  TABLE `kadai4`.`contributions` (
  
  `modified` TIMESTAMP NULL ,
   
- `users_name` VARCHAR(10) NOT NULL ;
+ `users_id` INT(11) NOT NULL ;
 PRIMARY KEY (`id`) );
