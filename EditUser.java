@@ -3,15 +3,15 @@ package kadai4.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class EditUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
 	private String loginid;
 	private String password;
 	private String name;
-	private String branchid;
-	private String departmentid;
+	private int branchid;
+	private int departmentid;
 	private int available;
 	private Date created;
 	private Date modified;
@@ -22,7 +22,6 @@ public class User implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-
 	}
 
 	public String getPassword() {
@@ -49,19 +48,19 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	public String getBranch_Id() {
+	public int getBranch_Id() {
 		return branchid;
 	}
 
-	public void setBranchId (String branchid) {
+	public void setBranchId (int branchid) {
 		this.branchid = branchid;
 	}
 
-	public String getDepartmentId() {
+	public int getDepartmentId() {
 		return departmentid;
 	}
 
-	public void setDepartmentId (String departmentid) {
+	public void setDepartmentId (int departmentid) {
 		this.departmentid = departmentid;
 	}
 

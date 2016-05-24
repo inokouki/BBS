@@ -16,22 +16,19 @@ import kadai4.exception.SQLRuntimeException;
 
 public class UserDao {
 
-	public User getUser(Connection connection, String accountOrEmail, String password) {
+	public User getUser(Connection connection, String loginid, String password) {
 
 		PreparedStatement ps = null;
 		try {
-			String sql = "SELECT * FROM test1.user WHERE (account = ? OR email = ?) AND password = ?";
+			String sql = "SELECT * FROM kadai4.users WHERE login_id = ? AND password = ?";
 			ps = connection.prepareStatement(sql);
-			ps.setString(1, accountOrEmail);
-			ps.setString(2, accountOrEmail);
-			ps.setString(3, password);
+			ps.setString(1, loginid);
+			ps.setString(2, password);
 
 			ResultSet rs = ps.executeQuery();
 			List<User> userList = toUserList(rs);
 			if (userList.isEmpty() == true) {
 				return null;
-			} else if (2 <= userList.size()) {
-				throw new IllegalStateException("2 <= userList.size()");
 			} else {
 				return userList.get(0);
 			}
@@ -48,22 +45,22 @@ public class UserDao {
 		try {
 			while (rs.next()) {
 				int id = rs.getInt("id");
-				String login_id = rs.getString("login_id");
+				String loginid = rs.getString("login_id");
 				String name = rs.getString("name");
 				String password = rs.getString("password");
-				int branch_id = rs.getInt("branch_id");
-				int department_id = rs.getInt("department_id");
-				int available = 1;
+				String branchid = rs.getString("branch_id");
+				String departmentid = rs.getString("department_id");
+				int available = rs.getInt("available");
 				Timestamp created = rs.getTimestamp("created");
 				Timestamp modified = rs.getTimestamp("modified");
 
 				User user = new User();
 				user.setId(id);
-				user.setLogin_Id(login_id);
+				user.setLoginId(loginid);
 				user.setName(name);
 				user.setPassword(password);
-				user.setBranch_Id(branch_id);
-				user.setDepartment_Id(department_id);
+				user.setBranchId(branchid);
+				user.setDepartmentId(departmentid);
 				user.setAvailable(available);
 				user.setCreated(created);
 				user.setModified(modified);
@@ -104,11 +101,11 @@ public class UserDao {
 
 			ps = connection.prepareStatement(sql.toString());
 
-			ps.setString(1, user.getLogin_Id());
+			ps.setString(1, user.getLoginId());
 			ps.setString(2, user.getPassword());
 			ps.setString(3, user.getName());
-			ps.setInt(4, user.getBranch_Id());
-			ps.setInt(5, user.getDepartment_Id());
+			ps.setString(4, user.getBranch_Id());
+			ps.setString(5, user.getDepartmentId());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -123,10 +120,9 @@ public class UserDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("UPDATE test1.user SET");
-			sql.append(" account = ?");
+			sql.append("UPDATE kadai4.users SET");
+			sql.append(" login_id = ?");
 			sql.append(", name = ?");
-			sql.append(", email = ?");
 			sql.append(", password = ?");
 			sql.append(", description = ?");
 			sql.append(", update_date = CURRENT_TIMESTAMP");
@@ -137,7 +133,7 @@ public class UserDao {
 			sql.append(" update_date = ?");
 			ps = connection.prepareStatement(sql.toString());
 
-			ps.setString(1, user.getLogin_Id());
+			ps.setString(1, user.getLoginId());
 			ps.setString(2, user.getName());
 			ps.setString(4, user.getPassword());
 			ps.setInt(6, user.getId());

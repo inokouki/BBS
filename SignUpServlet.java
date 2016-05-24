@@ -24,6 +24,10 @@ public class SignUpServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
+		User loginuser = (User) request.getSession().getAttribute("loginUser");
+
+		request.setAttribute("loginUser", loginuser);
+
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
 
@@ -36,14 +40,14 @@ public class SignUpServlet extends HttpServlet {
 		if(isValid(request, messages) == true) {
 			User user = new User();
 			user.setName(request.getParameter("name"));
-			user.setLogin_Id(request.getParameter("login_id"));
+			user.setLoginId(request.getParameter("login_id"));
 			user.setPassword(request.getParameter("password"));
-
-			System.out.println("user: " + user);
+			user.setBranchId(request.getParameter("branch_id"));
+			user.setDepartmentId(request.getParameter("department_id"));
 
 			new UserService().register(user);
 
-			response.sendRedirect("/home");
+			response.sendRedirect("/Kadai4/admin");
 		} else {
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("signup");
@@ -53,17 +57,29 @@ public class SignUpServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 		String login_id = request.getParameter("login_id");
 		String password = request.getParameter("password");
+		String name = request.getParameter("name");
 
-		System.out.println("login_id: " + login_id + ", password: " + password);
-
-		if(StringUtils.isEmpty(login_id) == true) {
+		if (StringUtils.isEmpty(login_id) == true) {
 			messages.add("ユーザーIDを入力してください");
-		}
-		if(StringUtils.isEmpty(password) == true) {
-			messages.add("パスワードを入力してください");
+		} else if (StringUtils.length(login_id) < 6) {
+			messages.add("ユーザーIDは6文字以上です");
+		} else if (StringUtils.length(login_id) > 20) {
+			messages.add("ユーザーIDは20文字以下です");
 		}
 
-		// TODOアカウントがすでに利用されていないか、メールアドレスがすでに登録されていないかなどの確認も必要
+		if (StringUtils.isEmpty(password) == true) {
+			messages.add("パスワードを入力してください");
+		} else if (StringUtils.length(password) < 6) {
+			messages.add("パスワードは6文字以上です");
+		} else if (StringUtils.length(password) > 255) {
+			messages.add("パスワードは255文字以下です");
+		}
+
+		if (StringUtils.isEmpty(name)  == true ) {
+			messages.add("名前を入力してください");
+		} else if (StringUtils.length(name) > 10) {
+			messages.add("名前は10文字以下です");
+		}
 
 		if(messages.size() == 0) {
 			return true;

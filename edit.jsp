@@ -5,13 +5,13 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>ユーザー登録</title>
+	<title>ユーザー編集画面</title>
 </head>
 <body>
 
-<div class="main-contents">
-
 <c:if test="${ loginUser.departmentId == 1}">
+ユーザー編集画面です。<br />
+<br />
 
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -24,7 +24,7 @@
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
 
-<form action="signup" method="post"> <br />
+<form action="edit" method="post"> <br />
 	<label for="login_id">ログインIDを入力してください(半角英数字:6文字以上、20文字以下)</label> <br />
 	<input name="login_id" id="login_id"/> <br />
 	<br />
@@ -63,9 +63,7 @@
 	</select><br>
 	<br />
 
-	<input type="submit" value="登録" /> <br />
-	<br />
-	<a href="/Kadai4/home.jsp">戻る</a>
+	<input type="submit" value="変更" /> <br />
 </form>
 </c:if>
 
@@ -74,6 +72,5 @@
 	<meta http-equiv="refresh"content="3; url=./">
 </c:if>
 
-</div>
 </body>
 </html>

@@ -4,49 +4,29 @@ import static kadai4.utils.CloseableUtil.*;
 import static kadai4.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.util.List;
 
 import kadai4.beans.User;
-import kadai4.dao.UserDao;
+import kadai4.dao.EditUserDao;
 import kadai4.utils.CipherUtil;
 
-public class UserService {
+public class EditService {
 
-	public void register(User user) {
-
-		Connection connection = null;
-		try {
-			connection = getConnection();
-
-			String encPassword = CipherUtil.encrypt(user.getPassword());
-			user.setPassword(encPassword);
-
-			UserDao userDao = new UserDao();
-
-			userDao.insert(connection, user);
-
-			commit(connection);
-		} catch (RuntimeException e){
-			rollback(connection);
-			throw e;
-		} catch (Error e) {
-			rollback(connection);
-			throw e;
-		} finally {
-			close(connection);
-		}
-	}
-
-	public void update(User user) {
+	public void editer(int editid, String loginid, String password,
+			String name, String branchid, String departmentid, User edituser) {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
-			String encPassword = CipherUtil.encrypt(user.getPassword());
-			user.setPassword(encPassword);
+			if (password == null) {
+				String encPassword = CipherUtil.encrypt(edituser.getPassword());
+				password = encPassword;
+			}
 
-			UserDao userDao = new UserDao();
-			userDao.update(connection, user);
+			EditUserDao edituserDao = new EditUserDao();
+
+			edituserDao.update(connection, editid, loginid, password, name, branchid, departmentid);
 
 			commit(connection);
 		} catch (RuntimeException e) {
@@ -60,8 +40,26 @@ public class UserService {
 		}
 	}
 
-	public User getUser(int id) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public List<User> getEditUser(int editid) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			EditUserDao userDao = new EditUserDao();
+			List<User> ret = userDao.getUserEdits(connection, editid);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
 	}
 }

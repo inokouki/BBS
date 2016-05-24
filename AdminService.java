@@ -4,51 +4,27 @@ import static kadai4.utils.CloseableUtil.*;
 import static kadai4.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.util.List;
 
 import kadai4.beans.User;
-import kadai4.dao.UserDao;
-import kadai4.utils.CipherUtil;
+import kadai4.dao.EditAvailableDao;
+import kadai4.dao.UserAdminDao;
 
-public class UserService {
+public class AdminService {
 
-	public void register(User user) {
+	private static final int LIMIT_NUM = 1000;
 
+	public List<User> getUser() {
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
-			String encPassword = CipherUtil.encrypt(user.getPassword());
-			user.setPassword(encPassword);
-
-			UserDao userDao = new UserDao();
-
-			userDao.insert(connection, user);
+			UserAdminDao adminDao = new UserAdminDao();
+			List<User> ret = adminDao.getUserAdmins(connection, LIMIT_NUM);
 
 			commit(connection);
-		} catch (RuntimeException e){
-			rollback(connection);
-			throw e;
-		} catch (Error e) {
-			rollback(connection);
-			throw e;
-		} finally {
-			close(connection);
-		}
-	}
 
-	public void update(User user) {
-
-		Connection connection = null;
-		try {
-			connection = getConnection();
-
-			String encPassword = CipherUtil.encrypt(user.getPassword());
-			user.setPassword(encPassword);
-
-			UserDao userDao = new UserDao();
-			userDao.update(connection, user);
-
-			commit(connection);
+			return ret;
 		} catch (RuntimeException e) {
 			rollback(connection);
 			throw e;
@@ -60,8 +36,25 @@ public class UserService {
 		}
 	}
 
-	public User getUser(int id) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public List<User> editAvailableUser(int id) {
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			EditAvailableDao adminDao = new EditAvailableDao();
+			List<User> ret = adminDao.editUserAvailable(connection, LIMIT_NUM, id);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
 	}
 }
