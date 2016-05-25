@@ -7,6 +7,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ホーム</title>
+	<link rel="stylesheet" type="text/css" href="css/home.css" />
 </head>
 <body>
 
@@ -19,13 +20,14 @@
 		<a href="login">ログイン</a>
 	</c:if>
 	<c:if test="${ not empty loginUser }">
-		<h2>ログインしました。${loginUser.name}さん、こんにちは。</h2>
-		<a href="admin">ユーザー管理</a>
-		<a href="post">新規投稿</a>
+		<h1>ログインしました。${loginUser.name}さん、こんにちは。</h1>
+		<h2><a href="admin">ユーザー管理(総務人事担当のみ)</a></h2>
+		<h2><a href="post">新規投稿</a></h2>
+		<br />
 	</c:if>
 </div>
 
-		<form action="./" method="post">
+		<form action="./" method="get">
 			<label for="searchCategory">[カテゴリー検索]→</label>
 			<input name="searchCategory" id="searchCategory" /> <br />
 
@@ -36,8 +38,7 @@
 			<input type="submit" value="検索" /> <br />
 		</form>
 
-		<br />
-<br />
+		<br /><br /><br />
 
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -51,8 +52,7 @@
 </c:if>
 
 <c:if test="${ empty searches }">
-検索何もなし
-<br />
+
 <div class="contribution">
 	<c:forEach items="${contributions}" var="message">
 		<div class="contribution">
@@ -62,8 +62,25 @@
 					<span class="text">[本文]<br /><c:out value="${message.text}" /><br /></span>
 					<span class="created">[投稿日時]:<c:out value="${message.created}" /></span>
 					<span class="userId">[投稿者]:<c:out value="${message.userId}" /></span>
-					<span class="id">投稿number:<c:out value="${message.id}"/></span>
-					<br />
+					<span class="id">投稿number:<c:out value="${message.id}"/></span><br />
+
+					<c:if test="${loginUser.departmentId == 2 }">
+					<form action="./" method="post">
+						<input type="submit" value="投稿の削除"
+						onClick="return confirm('投稿の削除を行いますか？')">
+						<input name="delete" type="hidden" id="delete" value="${message.id}">
+					</form>
+					</c:if>
+
+					<c:if test="${(loginUser.departmentId == 3 || loginUser.departmentId == 4 ||
+						loginUser.departmentId == 5) }">
+					<form action="./" method="post">
+						<input type="submit" value="投稿の削除"
+						onClick="return confirm('投稿の削除を行いますか？')">
+						<input name="delete" type="hidden" id="delete" value="${message.id}">
+					</form>
+					</c:if>
+
 					<br />
 				</div>
 			</div>
@@ -96,8 +113,7 @@
 </c:if>
 
 <c:if test="${ not empty searches }">
-検索ワードあり
-<br />
+
 <div class="contribution">
 	<c:forEach items="${searches}" var="message">
 		<div class="contribution">
@@ -140,6 +156,7 @@
 </div>
 </c:if>
 </div>
+
 </c:if>
 
 <c:if test="${loginUser.available == 0 }">

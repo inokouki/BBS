@@ -6,9 +6,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ログイン</title>
+	<link rel="stylesheet" type="text/css" href="css/login.css" />
 </head>
 <body>
 <div class="main-contents">
+<h4>バリストライドグループ 掲示板システム</h4>
 
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -22,13 +24,14 @@
 </c:if>
 
 <form action="login" method="post"><br />
-	<label for="loginid">ログインID</label>
-	<input name="loginid" id="loginid" /> <br />
+	<h2><label for="loginid">ログインID</label></h2>
+	<h2><input name="loginid" id="loginid" /></h2> <br />
 
-	<label for="password">パスワード</label>
-	<input name="password" type="password" id="password" /> <br />
+	<h2><label for="password">パスワード</label></h2>
+	<input name="password" type="password" id="password" />
+	<br /><br />
 
-	<input type="submit" value="ログイン" /> <br />
+	<input type="submit" value="ログイン" />
 </form>
 </div>
 </body>

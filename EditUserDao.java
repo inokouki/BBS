@@ -98,6 +98,8 @@ public class EditUserDao {
 			sql.append(", modified=CURRENT_TIMESTAMP");
 			sql.append(" WHERE id=" + editid);
 
+			System.out.println("[EditUserDao]sql:" + sql);
+
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.executeUpdate();

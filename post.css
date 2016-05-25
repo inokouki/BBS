@@ -1,0 +1,23 @@
+h2 {
+    font color: black;
+    background: #E7B87A;
+}
+h4{
+	font-size: xx-large;
+	color: black;
+}
+p {
+    color: blue;
+}
+a {
+	color: blue;
+	background: #E7B87A;
+}
+div {
+    background: #E7B87A;
+}
+form{
+	border: black;
+	background: #E7B87A;
+	text-align: center;
+}

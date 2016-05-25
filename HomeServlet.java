@@ -25,20 +25,20 @@ import kadai4.service.MessageService;
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static String searchCategory=null, searchTimeBefore = null, searchTimeAfter = null;
+	private static String searchCategory=null, searchTimeBefore = null, searchTimeAfter = null, deletestr = null;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		User user = (User) request.getSession().getAttribute("loginUser");
+		request.setCharacterEncoding("UTF-8");
 
-		boolean isShowMessageForm;
-		if (user != null) {
-			isShowMessageForm = true;
-		} else {
-			isShowMessageForm = false;
-		}
+		searchCategory = request.getParameter("searchCategory");
+		searchTimeBefore = request.getParameter("searchTimeBefore");
+		searchTimeAfter = request.getParameter("searchTimeAfter");
+		deletestr = request.getParameter("delete");
+
+		User user = (User) request.getSession().getAttribute("loginUser");
 
 		List<UserMessage> contributions = new MessageService().getMessage();
 		List<UserComment> comments = new CommentService().getComment();
@@ -50,8 +50,8 @@ public class HomeServlet extends HttpServlet {
 		}
 
 		request.setAttribute("contributions", contributions);
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.setAttribute("comments", comments);
+		request.setAttribute("user", user);
 
 		request.getRequestDispatcher("/home.jsp").forward(request, response);
 	}
@@ -62,26 +62,27 @@ public class HomeServlet extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 
-		searchCategory = request.getParameter("searchCategory");
-		searchTimeBefore = request.getParameter("searchTimeBefore");
-		searchTimeAfter = request.getParameter("searchTimeAfter");
-
 		HttpSession session = request.getSession();
 
 		List<String> comments = new ArrayList<String>();
 
-		if (isValid(request, comments) == true) {
-			User user = (User)session.getAttribute("loginUser");
+		if (deletestr == null) {
+			if (isValid(request, comments) == true) {
+				User user = (User)session.getAttribute("loginUser");
 
-			Comment comment = new Comment();
+				Comment comment = new Comment();
 
-			comment.setComment(request.getParameter("comment"));
-			comment.setContributionId(request.getParameter("contribution_id"));
-			comment.setUserId(user.getLoginId());
+				comment.setComment(request.getParameter("comment"));
+				comment.setContributionId(request.getParameter("contribution_id"));
+				comment.setUserId(user.getLoginId());
 
-			new CommentService().register(comment);
+				new CommentService().register(comment);
+			} else {
+				session.setAttribute("errorMessages", comments);
+			}
 		} else {
-			session.setAttribute("errorMessages", comments);
+			int deleteid = Integer.parseInt(deletestr);
+			CommentService.deleteUser(deleteid);
 		}
 
 		response.sendRedirect("./");
@@ -90,20 +91,21 @@ public class HomeServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> comments) {
 
 		String comment = request.getParameter("comment");
+
+		System.out.println("comment1:" + deletestr);
+
 		int error = 0;
 
-		if (StringUtils.isEmpty(comment) == true) {
-			comments.add("コメント文を入力してください");
-		} else if (comment.length() > 1000) {
-			comments.add("コメント文は500文字以下です");
+		if (searchCategory == null && searchTimeBefore == null && searchTimeAfter == null) {
+			if (StringUtils.isEmpty(comment) == true && deletestr == null) {
+				comments.add("コメント文を入力してください");
+			} else if (comment.length() > 1000) {
+				comments.add("コメント文は500文字以下です");
+			}
 		}
 
-		System.out.println("comments[before]:" + comments);
-
 		if (searchCategory != null || (searchTimeBefore != null && searchTimeAfter != null)) {
-			System.out.println("test");
 			comments.removeAll(comments);
-			System.out.println("comments[after]:" + comments);
 			error = 1;
 		}
 

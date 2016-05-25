@@ -19,7 +19,7 @@ public class EditService {
 		try {
 			connection = getConnection();
 
-			if (password == null) {
+			if (password != null) {
 				String encPassword = CipherUtil.encrypt(edituser.getPassword());
 				password = encPassword;
 			}

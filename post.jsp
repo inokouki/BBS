@@ -7,6 +7,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>新規投稿画面</title>
+	<link rel="stylesheet" type="text/css" href="css/post.css" />
 </head>
 <body>
 
@@ -20,9 +21,6 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-
-新規投稿
-<br />
 
 <form action="post" method="post"> <br />
 	件名(50文字以下)<br />

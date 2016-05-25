@@ -9,6 +9,7 @@ import java.util.List;
 import kadai4.beans.User;
 import kadai4.dao.EditAvailableDao;
 import kadai4.dao.UserAdminDao;
+import kadai4.dao.UserDao;
 
 public class AdminService {
 
@@ -47,6 +48,26 @@ public class AdminService {
 			commit(connection);
 
 			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	public static void deleteUser(int id) {
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			userDao.delete(connection, id);
+
+			commit(connection);
 		} catch (RuntimeException e) {
 			rollback(connection);
 			throw e;

@@ -15,6 +15,7 @@ import kadai4.service.AdminService;
 @WebServlet(urlPatterns = { "/admin" })
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static String editstr = null, deletestr = null;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,11 +35,20 @@ public class AdminServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
-		int editid = Integer.parseInt(request.getParameter("stop"));
+		deletestr = request.getParameter("delete");
+		editstr = request.getParameter("stop");
 
-		List<User> users = new AdminService().editAvailableUser(editid);
+		if (deletestr == null) {
+			int editid = Integer.parseInt(editstr);
+			List<User> users = new AdminService().editAvailableUser(editid);
+			request.setAttribute("users", users);
+		}
 
-		request.setAttribute("users", users);
+		if (editstr == null) {
+			int deleteid = Integer.parseInt(deletestr);
+			AdminService.deleteUser(deleteid);
+		}
+
 
 		response.sendRedirect("/Kadai4/admin");
 	}

@@ -13,7 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import kadai4.beans.Branch;
+import kadai4.beans.Department;
 import kadai4.beans.User;
+import kadai4.service.BranchService;
+import kadai4.service.DepartmentService;
 import kadai4.service.UserService;
 
 @WebServlet(urlPatterns = { "/signup" })
@@ -25,8 +29,13 @@ public class SignUpServlet extends HttpServlet {
 		throws IOException, ServletException {
 
 		User loginuser = (User) request.getSession().getAttribute("loginUser");
-
 		request.setAttribute("loginUser", loginuser);
+
+		List<Branch> branches = new BranchService().getBranch();
+		request.setAttribute("branches", branches);
+
+		List<Department> departments = new DepartmentService().getDepartment();
+		request.setAttribute("departments", departments);
 
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
@@ -58,6 +67,8 @@ public class SignUpServlet extends HttpServlet {
 		String login_id = request.getParameter("login_id");
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
+		String branchid = request.getParameter("branch_id");
+		String departmentid = request.getParameter("department_id");
 
 		if (StringUtils.isEmpty(login_id) == true) {
 			messages.add("ユーザーIDを入力してください");
@@ -79,6 +90,14 @@ public class SignUpServlet extends HttpServlet {
 			messages.add("名前を入力してください");
 		} else if (StringUtils.length(name) > 10) {
 			messages.add("名前は10文字以下です");
+		}
+
+		if (branchid.equals("0")) {
+			messages.add("支店を選択してください");
+		}
+
+		if (departmentid.equals("0")) {
+			messages.add("部署・役職を選択してください");
 		}
 
 		if(messages.size() == 0) {

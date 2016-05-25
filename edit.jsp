@@ -6,12 +6,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ユーザー編集画面</title>
+	<link rel="stylesheet" type="text/css" href="css/bbs.css" />
 </head>
 <body>
 
 <c:if test="${ loginUser.departmentId == 1}">
-ユーザー編集画面です。<br />
-<br />
 
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -42,29 +41,22 @@
 	<br />
 
 	支店<select name="branch_id">
-		<option value="0">選択してください</option>
-		<option value="1">1:本社</option>
-		<option value="2">2:支店A</option>
-		<option value="3">3:支店B</option>
-		<option value="4">4:支店C</option>
-	</select><br>
-	<br />
+	<option value="0">選択してください</option>
+	<c:forEach items="${branches}" var="branch">
+		<option value="${branch.id}">${branch.name}</option>
+	</c:forEach>
+	</select><br /><br />
 
 	部署・役職<select name="department_id">
-		<option value="0">選択してください</option>
-		<option value="1">1:総務人事担当者</option>
-		<option value="2">2:情報管理担当者</option>
-		<option value="3">3:支店長A</option>
-		<option value="4">4:支店長B</option>
-		<option value="5">5:支店長C</option>
-		<option value="6">6:社員A</option>
-		<option value="7">7:社員B</option>
-		<option value="8">8:社員C</option>
-	</select><br>
-	<br />
+	<option value="0">選択してください</option>
+	<c:forEach items="${departments}" var="department">
+		<option value="${department.id}">${department.name}</option>
+	</c:forEach>
+	</select><br /><br />
 
-	<input type="submit" value="変更" /> <br />
+	<input type="submit" value="変更" /> <br /><br />
 </form>
+
 </c:if>
 
 <c:if test="${ loginUser.departmentId != 1 }">
