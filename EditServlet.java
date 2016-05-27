@@ -26,11 +26,12 @@ public class EditServlet extends HttpServlet {
 	private int edituserid;
 	private String inputid = null;
 	private boolean editflag = false;
-	private int refresh = 0;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+
+		inputid = request.getParameter("editid");
 
 		User loginuser = (User) request.getSession().getAttribute("loginUser");
 		request.setAttribute("loginUser", loginuser);
@@ -49,18 +50,8 @@ public class EditServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		if (refresh == 0) {
-			refresh = 1;
-			request.getRequestDispatcher("edit.jsp").forward(request, response);
-		}
-
 		request.setCharacterEncoding("UTF-8");
 
-		if (editflag == false) {
-			inputid = request.getParameter("editid");
-			edituserid = Integer.parseInt(inputid);
-			editflag = true;
-		}
 
 		String loginid = request.getParameter("login_id");
 		String password = request.getParameter("password");
@@ -68,12 +59,18 @@ public class EditServlet extends HttpServlet {
 		String branchid = request.getParameter("branch_id");
 		String departmentid = request.getParameter("department_id");
 
+		if (editflag == false) {
+			edituserid = Integer.parseInt(inputid);
+			System.out.println("[EditServlet]edituserid:" + edituserid);
+			editflag = true;
+		}
+
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
 
 		if (isValid(request, messages) == true) {
 			User edituser = new User();
-			edituser.setLoginId(loginid);
+			edituser.setLoginId(request.getParameter("login_id"));
 			edituser.setPassword(request.getParameter("password"));
 			edituser.setName(request.getParameter("name"));
 			edituser.setDepartmentId(request.getParameter("branch_id"));
@@ -102,37 +99,44 @@ public class EditServlet extends HttpServlet {
 		String branchid = request.getParameter("branch_id");
 		String departmentid = request.getParameter("department_id");
 
+		System.out.println("pass:" + password);
+		System.out.println("check:" + checkpassword);
+
 		if (StringUtils.isEmpty(loginid) == true) {
-			messages.add("ログインIDを入力してください");
+			messages.add("・ログインIDを入力してください");
 		} else if (StringUtils.length(loginid) < 6) {
-			messages.add("ログインIDは6文字以上です");
+			messages.add("・ログインIDは6文字以上です");
 		} else if (StringUtils.length(loginid) > 20) {
-			messages.add("ログインIDは20文字以下です");
+			messages.add("・ログインIDは20文字以下です");
 		}
 
 
 		if (StringUtils.length(password) != 0) {
 			if (StringUtils.length(password) < 6) {
-				messages.add("パスワードは6文字以上です");
+				messages.add("・パスワードは6文字以上です");
 			} else if (StringUtils.length(password) > 255) {
-				messages.add("パスワードは255文字以下です");
+				messages.add("・パスワードは255文字以下です");
 			}
-			if (password == checkpassword) {
-				messages.add("パスワードが一致しません");
+			if (password != checkpassword || (password != null && checkpassword == null)) {
+				messages.add("・パスワードが一致しません");
 			}
+		}
+
+		if (StringUtils.length(checkpassword) != 0 && StringUtils.length(password) == 0) {
+			messages.add("・パスワードのフォームは両方入力してください");
 		}
 
 		if (StringUtils.isEmpty(name)  == true ) {
-			messages.add("名前を入力してください");
+			messages.add("・名前を入力してください");
 		} else if (StringUtils.length(name) > 10) {
-			messages.add("名前は10文字以下です");
+			messages.add("・名前は10文字以下です");
 		}
 
 		if (branchid.equals("0")) {
-			messages.add("支店を選んでください");
+			messages.add("・支店を選んでください");
 		}
 		if (departmentid.equals("0")) {
-			messages.add("部署・役職を選んでください");
+			messages.add("・部署・役職を選んでください");
 		}
 
 		if(messages.size() == 0) {

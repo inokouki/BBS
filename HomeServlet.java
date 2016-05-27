@@ -18,7 +18,9 @@ import kadai4.beans.SearchMessage;
 import kadai4.beans.User;
 import kadai4.beans.UserComment;
 import kadai4.beans.UserMessage;
+import kadai4.service.AdminDeleteService;
 import kadai4.service.CommentService;
+import kadai4.service.HomeService;
 import kadai4.service.MessageSearchService;
 import kadai4.service.MessageService;
 
@@ -26,6 +28,8 @@ import kadai4.service.MessageService;
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String searchCategory=null, searchTimeBefore = null, searchTimeAfter = null, deletestr = null;
+	private static String conname = null;
+	int loginbranchid;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,10 +42,12 @@ public class HomeServlet extends HttpServlet {
 		searchTimeAfter = request.getParameter("searchTimeAfter");
 		deletestr = request.getParameter("delete");
 
-		User user = (User) request.getSession().getAttribute("loginUser");
+		User loginuser = (User) request.getSession().getAttribute("loginUser");
 
 		List<UserMessage> contributions = new MessageService().getMessage();
 		List<UserComment> comments = new CommentService().getComment();
+		List<User> bracons = new HomeService().getUser();
+
 
 		if (searchCategory != null || searchTimeBefore != null || searchTimeAfter != null) {
 			List<SearchMessage> searches = new MessageSearchService().getMessage(searchCategory,
@@ -51,7 +57,8 @@ public class HomeServlet extends HttpServlet {
 
 		request.setAttribute("contributions", contributions);
 		request.setAttribute("comments", comments);
-		request.setAttribute("user", user);
+		request.setAttribute("loginUser", loginuser);
+		request.setAttribute("bracons", bracons);
 
 		request.getRequestDispatcher("/home.jsp").forward(request, response);
 	}
@@ -60,9 +67,15 @@ public class HomeServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
+		HttpSession session = request.getSession();
 		request.setCharacterEncoding("UTF-8");
 
-		HttpSession session = request.getSession();
+		deletestr = request.getParameter("delete");
+		conname = request.getParameter("conname");
+
+		if (request.getParameter("loginbranchid") != null) {
+			loginbranchid = Integer.parseInt(request.getParameter("loginbranchid"));
+		}
 
 		List<String> comments = new ArrayList<String>();
 
@@ -82,7 +95,19 @@ public class HomeServlet extends HttpServlet {
 			}
 		} else {
 			int deleteid = Integer.parseInt(deletestr);
-			CommentService.deleteUser(deleteid);
+
+			if (conname.length() == 0) {
+				CommentService.deleteUser(deleteid);
+			} else {
+				boolean admincheck = AdminDeleteService.getCheck(conname, loginbranchid);
+
+				if (admincheck == true) {
+					CommentService.deleteUser(deleteid);
+				} else {
+					comments.add("・削除権限がありません。");
+					session.setAttribute("errorMessages", comments);
+				}
+			}
 		}
 
 		response.sendRedirect("./");
@@ -92,28 +117,19 @@ public class HomeServlet extends HttpServlet {
 
 		String comment = request.getParameter("comment");
 
-		System.out.println("comment1:" + deletestr);
-
 		int error = 0;
 
 		if (searchCategory == null && searchTimeBefore == null && searchTimeAfter == null) {
 			if (StringUtils.isEmpty(comment) == true && deletestr == null) {
-				comments.add("コメント文を入力してください");
+				comments.add("・コメント文を入力してください");
 			} else if (comment.length() > 1000) {
-				comments.add("コメント文は500文字以下です");
+				comments.add("・コメント文は500文字以下です");
 			}
 		}
 
 		if (searchCategory != null || (searchTimeBefore != null && searchTimeAfter != null)) {
 			comments.removeAll(comments);
 			error = 1;
-		}
-
-
-		if (searchTimeBefore == null && searchTimeAfter != null) {
-			comments.add("無効な入力です");
-		} else if (searchTimeBefore != null && searchTimeAfter == null) {
-			comments.add("無効な入力です");
 		}
 
 		if (comments.size() == 0 && error == 0) {

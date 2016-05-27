@@ -4,7 +4,6 @@ h2 {
 }
 h3 {
     color: red;
-    background: #d5ffaf;
 }
 h4{
 	font-size: xx-large;
@@ -23,5 +22,4 @@ div {
 form{
 	border: black;
 	background: #d5ffaf;
-	text-align: center;
 }

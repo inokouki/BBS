@@ -38,6 +38,10 @@ public class PostServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 
+		String title = request.getParameter("title");
+		String text = request.getParameter("text");
+		String category = request.getParameter("category");
+
 		if (isValid(request, messages) == true) {
 			User user = (User)session.getAttribute("loginUser");
 
@@ -52,6 +56,9 @@ public class PostServlet extends HttpServlet {
 
 			response.sendRedirect("./");
 		} else {
+			session.setAttribute("title", title);
+			session.setAttribute("text", text);
+			session.setAttribute("category", category);
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("post");
 		}
@@ -64,21 +71,21 @@ public class PostServlet extends HttpServlet {
 		String category = request.getParameter("category");
 
 		if (StringUtils.isEmpty(title) == true) {
-			messages.add("件名を入力してください");
+			messages.add("・件名を入力してください");
 		} else if (title.length() > 50) {
-			messages.add("件名は50文字以下です");
+			messages.add("・件名は50文字以下です");
 		}
 
 		if (StringUtils.isEmpty(text) == true) {
-			messages.add("本文を入力してください");
+			messages.add("・本文を入力してください");
 		} else if (text.length() > 1000) {
-			messages.add("本文は1000文字以下です");
+			messages.add("・本文は1000文字以下です");
 		}
 
 		if (StringUtils.isEmpty(category) == true) {
-			messages.add("カテゴリーを入力してください");
+			messages.add("・カテゴリーを入力してください");
 		} else if (category.length() > 10) {
-			messages.add("カテゴリーは10文字以下です");
+			messages.add("・カテゴリーは10文字以下です");
 		}
 
 		if (messages.size() == 0) {

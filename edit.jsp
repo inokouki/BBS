@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ユーザー編集画面</title>
-	<link rel="stylesheet" type="text/css" href="css/bbs.css" />
+	<link rel="stylesheet" type="text/css" href="css/edit.css" />
 </head>
 <body>
 
@@ -16,7 +16,7 @@
 	<div class="errorMessages">
 		<ul>
 			<c:forEach items="${errorMessages}" var="message">
-				<li><c:out value="${message}"/>
+				<h3><c:out value="${message}"/></h3>
 			</c:forEach>
 		</ul>
 	</div>
@@ -56,6 +56,8 @@
 
 	<input type="submit" value="変更" /> <br /><br />
 </form>
+
+<a href="admin" >戻る</a>
 
 </c:if>
 

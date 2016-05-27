@@ -23,18 +23,39 @@ public class UserSearchDao {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM kadai4.contributions ");
 
-			if (!searchCategory.isEmpty() && searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) {
+			if (!searchCategory.isEmpty() && searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) { // 1,0,0
 				sql.append("WHERE ");
 				sql.append("category = \"" + searchCategory + "\" ");
-			} else if (searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) {
+
+			} else if (searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 0,1,1
 				sql.append("WHERE created BETWEEN \"");
 				sql.append(searchTimeBefore + " 00:00:00\" AND \"" + searchTimeAfter + " 23:59:59\" " );
-			} else if (!searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) {
+
+			} else if (!searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 1,1,1
 				sql.append("WHERE ");
 				sql.append("category = \"" + searchCategory + "\" ");
 				sql.append("AND ");
 				sql.append("created BETWEEN \"");
 				sql.append(searchTimeBefore + " 00:00:00\" AND \"" + searchTimeAfter + " 23:59:59\" " );
+
+			} else if (!searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) { // 1,1,0
+				sql.append("WHERE ");
+				sql.append("category = \"" + searchCategory + "\" AND ");
+				sql.append("created > \"" + searchTimeBefore + " 00:00:00\" ");
+
+			} else if (!searchCategory.isEmpty() && searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 1,0,1
+				sql.append("WHERE ");
+				sql.append("category = \"" + searchCategory + "\" AND ");
+				sql.append("created < \"" + searchTimeAfter + " 00:00:00\" ");
+
+			} else if (searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) { // 0,1,0
+				sql.append("WHERE ");
+				sql.append("created > \"" + searchTimeBefore + " 00:00:00\" ");
+
+			} else if (searchCategory.isEmpty() && searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 0,0,1
+				sql.append("WHERE ");
+				sql.append("created < \"" + searchTimeAfter + " 00:00:00\" ");
+
 			}
 
 			sql.append("ORDER BY created DESC limit " + num);

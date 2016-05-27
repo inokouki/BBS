@@ -46,6 +46,11 @@ public class SignUpServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
+
+		String login_id = request.getParameter("login_id");
+		String password = request.getParameter("password");
+		String name = request.getParameter("name");
+
 		if(isValid(request, messages) == true) {
 			User user = new User();
 			user.setName(request.getParameter("name"));
@@ -59,6 +64,9 @@ public class SignUpServlet extends HttpServlet {
 			response.sendRedirect("/Kadai4/admin");
 		} else {
 			session.setAttribute("errorMessages", messages);
+			session.setAttribute("login_id", login_id);
+			session.setAttribute("password", password);
+			session.setAttribute("name", name);
 			response.sendRedirect("signup");
 		}
 	}
@@ -66,43 +74,55 @@ public class SignUpServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 		String login_id = request.getParameter("login_id");
 		String password = request.getParameter("password");
+		String checkpassword = request.getParameter("checkpassword");
 		String name = request.getParameter("name");
 		String branchid = request.getParameter("branch_id");
 		String departmentid = request.getParameter("department_id");
 
 		if (StringUtils.isEmpty(login_id) == true) {
-			messages.add("ユーザーIDを入力してください");
+			messages.add("・ユーザーIDを入力してください");
+
 		} else if (StringUtils.length(login_id) < 6) {
-			messages.add("ユーザーIDは6文字以上です");
+			messages.add("・ユーザーIDは6文字以上です");
+
 		} else if (StringUtils.length(login_id) > 20) {
-			messages.add("ユーザーIDは20文字以下です");
+			messages.add("・ユーザーIDは20文字以下です");
 		}
 
 		if (StringUtils.isEmpty(password) == true) {
-			messages.add("パスワードを入力してください");
+			messages.add("・パスワードを入力してください");
+
 		} else if (StringUtils.length(password) < 6) {
-			messages.add("パスワードは6文字以上です");
+			messages.add("・パスワードは6文字以上です");
+
 		} else if (StringUtils.length(password) > 255) {
-			messages.add("パスワードは255文字以下です");
+			messages.add("・パスワードは255文字以下です");
+		}
+
+		if (!password.equals(checkpassword) || (password == null && checkpassword != null)
+				|| (password != null && checkpassword == null)) {
+			messages.add("・パスワードが一致しません");
 		}
 
 		if (StringUtils.isEmpty(name)  == true ) {
-			messages.add("名前を入力してください");
+			messages.add("・名前を入力してください");
 		} else if (StringUtils.length(name) > 10) {
-			messages.add("名前は10文字以下です");
+			messages.add("・名前は10文字以下です");
 		}
 
 		if (branchid.equals("0")) {
-			messages.add("支店を選択してください");
+			messages.add("・支店を選択してください");
 		}
 
 		if (departmentid.equals("0")) {
-			messages.add("部署・役職を選択してください");
+			messages.add("・部署・役職を選択してください");
 		}
 
 		if(messages.size() == 0) {
 			return true;
+
 		} else {
+
 			return false;
 		}
 	}

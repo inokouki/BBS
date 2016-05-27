@@ -11,11 +11,13 @@
 </head>
 <body>
 
+<h1>新規投稿画面</h1><br />
+
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
 			<c:forEach items="${errorMessages}" var="message">
-				<li><c:out value="${message}" /></li>
+				<h3><c:out value="${message}" /></h3>
 			</c:forEach>
 		</ul>
 	</div>
@@ -24,19 +26,20 @@
 
 <form action="post" method="post"> <br />
 	件名(50文字以下)<br />
-	<textarea name="title" cols="100" rows="1" class="title"></textarea>
+	<textarea name="title" cols="100" rows="1" class="title">${title}</textarea>
 	<br />
 	<br />
 	本文(1000文字以下)<br />
-	<textarea name="text" cols="100" rows="10" class="text"></textarea>
+	<textarea name="text" cols="100" rows="10" class="text">${text}</textarea>
 	<br />
 	<br />
 	カテゴリー(10文字以下)<br />
-	<textarea name="category" cols="20" rows="1" class="category"></textarea>
+	<textarea name="category" cols="20" rows="1" class="category">${category}</textarea>
 	<br />
 	<br />
 	<input type="submit" value="投稿する">
 </form>
 
+<a href="./" >戻る</a>
 </body>
 </html>

@@ -10,11 +10,13 @@
 </head>
 <body>
 
+<h1>ユーザー管理</h1><br /><br />
+
 <c:if test="${ loginUser.departmentId == 1}">
 
-<h2><a href="signup">ユーザー新規登録</a></h2>
-<br />
-<br />
+<h2><a href="signup">ユーザー新規登録</a>
+<a href="./" >ホーム</a>
+<br /><br /><br /></h2>
 
 <div class="admin">
 	<c:forEach items="${users}" var="message">
@@ -25,26 +27,29 @@
 						<h3>↓↓↓操作厳禁↓↓↓</h3>
 					</c:if>
 
-					<c:if test="${ message.available  == 1}">
-						<h3>[ このアカウントは使用可能です。] </h3>
-					</c:if>
-					<c:if test="${ message.available  == 0}">
-						<h3>[ このアカウントは使用不可です。復活を行う必要があります。] </h3>
-					</c:if>
+					<span class="loginid">[ログインID]<c:out value="${message.loginId} " /></span>
+					<span class="name">,[名称]<c:out value="${message.name} " /></span>
 
-					<span class="loginid">[ログインID]:<c:out value="${message.loginId} " /></span><br />
-					<span class="name">[名称]:<c:out value="${message.name} " /></span><br />
-
-					<form action="edit" method="post">
+					<form action="edit" method="get">
 						<input type="submit" value="ユーザー情報の編集" >
 						<input name="editid" type="hidden" id="editid" value="${message.id}">
 					</form>
 
+					<c:if test="${ message.available  == 1}">
 					<form action="admin" method="post">
-						<input type="submit" value="アカウントの[停止]又は[復活]"
-						onClick="return confirm('アカウントの[停止]又は[復活]を行いますか？')">
+						<input type="submit" value="アカウントの[停止]"
+						onClick="return confirm('このアカウントは現在使用可能です。アカウントの[停止]を行いますか？')">
 						<input name="stop" type="hidden" id="stop" value="${message.id}">
 					</form>
+					</c:if>
+
+					<c:if test="${ message.available  == 0}">
+					<form action="admin" method="post">
+						<input type="submit" value="アカウントの[復活]"
+						onClick="return confirm('このアカウントは現在停止中です。アカウントの[復活]を行いますか？')">
+						<input name="stop" type="hidden" id="stop" value="${message.id}">
+					</form>
+					</c:if>
 
 					<form action="admin" method="post">
 						<input type="submit" value="アカウントの削除"
@@ -63,6 +68,7 @@
 		</div>
 	</c:forEach>
 </div>
+
 </c:if>
 
 <c:if test="${ loginUser.departmentId != 1 }">

@@ -3,7 +3,7 @@ h2 {
 }
 h3 {
     color: red;
-    background: #E7B87A;
+    background: #d5ffaf;
 }
 h4{
 	font-size: xx-large;
@@ -11,18 +11,18 @@ h4{
 }
 p {
     color: blue;
-    background: #E7B87A;
+    background: #d5ffaf;
 }
 a {
 	color: blue;
-	background: #E7B87A;
+	background: #d5ffaf;
 }
 div {
-    background: #E7B87A;
+    background: #d5ffaf;
 }
 form{
 	border: black;
-	background: #E7B87A;
+	background: #d5ffaf;
 }
 button{
 	width: 50;

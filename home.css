@@ -1,6 +1,10 @@
 h2 {
-    font color: black;
-    background: #E7B87A;
+    color: black;
+    background: #d5ffaf;
+}
+h3 {
+    color: red;
+    background: #d5ffaf;
 }
 h4{
 	font-size: xx-large;
@@ -11,12 +15,12 @@ p {
 }
 a {
 	color: blue;
-	background: #E7B87A;
+	background: #d5ffaf;
 }
 div {
-    background: #E7B87A;
+    background: #d5ffaf;
 }
 form{
 	border: black;
-	background: #E7B87A;
+	background: #d5ffaf;
 }

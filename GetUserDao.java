@@ -13,32 +13,20 @@ import java.util.List;
 import kadai4.beans.User;
 import kadai4.exception.SQLRuntimeException;
 
-public class EditAvailableDao {
-	private int available;
-	private int updateflag;
+public class GetUserDao {
 
-	public List<User> editUserAvailable(Connection connection, int num, int id) {
+	public List<User> getUsers(Connection connection, int num) {
 
 		PreparedStatement ps = null;
-		PreparedStatement editps = null;
 		try {
-			StringBuilder selectsql = new StringBuilder();
-			selectsql.append("SELECT * FROM kadai4.users ");
-			selectsql.append("ORDER BY id ASC limit " + num);
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM kadai4.users ");
+			sql.append("ORDER BY id ASC limit " + num);
 
-			ps = connection.prepareStatement(selectsql.toString());
+			ps = connection.prepareStatement(sql.toString());
 
 			ResultSet rs = ps.executeQuery();
-			List<User> ret = toUserEditList(rs, id);
-
-			StringBuilder updatesql = new StringBuilder();
-
-			updatesql.append("UPDATE kadai4.users SET ");
-			updatesql.append("available=" + updateflag + " WHERE id=" + id);
-
-			editps = connection.prepareStatement(updatesql.toString());
-			@SuppressWarnings("unused")
-			int editrs = editps.executeUpdate();
+			List<User> ret = toUserAdminList(rs);
 
 			return ret;
 		} catch (SQLException e) {
@@ -48,7 +36,7 @@ public class EditAvailableDao {
 		}
 	}
 
-	private List<User> toUserEditList(ResultSet rs, int editid) throws SQLException {
+	private List<User> toUserAdminList(ResultSet rs) throws SQLException {
 
 		List<User> ret = new ArrayList<User>();
 		try {
@@ -59,18 +47,9 @@ public class EditAvailableDao {
 				String name = rs.getString("name");
 				String branchid = rs.getString("branch_id");
 				String departmentid = rs.getString("department_id");
-				available = rs.getInt("available");
+				int available = rs.getInt("available");
 				Timestamp created = rs.getTimestamp("created");
 				Timestamp modified = rs.getTimestamp("modified");
-
-				if(id == editid) {
-					if (available == 1) {
-						available = 0;
-					} else if (available == 0) {
-						available = 1;
-					}
-					updateflag = available;
-				}
 
 				User message = new User();
 
