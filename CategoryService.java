@@ -4,28 +4,26 @@ import static bulletinboardsystem.utils.CloseableUtil.*;
 import static bulletinboardsystem.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.util.List;
 
-import bulletinboardsystem.beans.User;
-import bulletinboardsystem.dao.UserDao;
-import bulletinboardsystem.utils.CipherUtil;
+import bulletinboardsystem.beans.UserMessage;
+import bulletinboardsystem.dao.CategoryDao;
 
-public class LoginService {
+public class CategoryService {
 
-	public User login(String loginid, String password) {
+	private static final int LIMIT_NUM = 1000;
 
+	public List<UserMessage> getSearchCategory() {
 		Connection connection = null;
-		try{
+		try {
 			connection = getConnection();
 
-			UserDao userDao = new UserDao();
-			String encPassword = CipherUtil.encrypt(password);
-
-
-
-			User user = userDao.getUser(connection, loginid, encPassword);
+			CategoryDao categoryDao = new CategoryDao();
+			List<UserMessage> ret = categoryDao.getCategories(connection, LIMIT_NUM);
 
 			commit(connection);
-			return user;
+
+			return ret;
 		} catch (RuntimeException e) {
 			rollback(connection);
 			throw e;

@@ -10,13 +10,15 @@
 </head>
 <body>
 
+<h2>ユーザー編集画面</h2><br />
+
 <c:if test="${ loginUser.departmentId == 1}">
 
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
 			<c:forEach items="${errorMessages}" var="message">
-				<h3><c:out value="${message}"/></h3>
+				<h1><c:out value="${message}"/></h1>
 			</c:forEach>
 		</ul>
 	</div>
@@ -25,7 +27,7 @@
 
 <form action="edit" method="post"> <br />
 	<label for="login_id">ログインIDを入力してください(半角英数字:6文字以上、20文字以下)</label> <br />
-	<input name="login_id" id="login_id"/> <br />
+	<input name="login_id" id="login_id" value="${loginId}"/> <br />
 	<br />
 
 	<label for="password">パスワードを入力してください(半角文字:6文字以上、255文字以下)</label> <br />
@@ -33,11 +35,11 @@
 	<br />
 
 	<label for="checkpassword">確認のため、パスワードをもう一度入力してください</label> <br />
-	<input name="checkpassword" type="password" id="checkpassword"/> <br />
+	<input name="checkpassword" id="checkpassword"/> <br />
 	<br />
 
 	<label for="name">名前(10文字以下)</label> <br />
-	<input name="name" id="name"/> <br />
+	<input name="name" id="name" value="${name}"/> <br />
 	<br />
 
 	支店<select name="branch_id">

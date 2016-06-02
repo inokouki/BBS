@@ -1,26 +1,8 @@
-h2 {
-    color: black;
-    background: #d5ffaf;
+html {
+	background-image: url(8RPHFpQk.png);
+	background-position: center;
+	font-weight: bold;
 }
-h3 {
-    color: red;
-    background: #d5ffaf;
-}
-h4{
-	font-size: xx-large;
-	color: black;
-}
-p {
-    color: blue;
-}
-a {
-	color: blue;
-	background: #d5ffaf;
-}
-div {
-    background: #d5ffaf;
-}
-form{
-	border: black;
-	background: #d5ffaf;
+h1 {
+	color: #b80000;
 }

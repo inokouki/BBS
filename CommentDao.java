@@ -1,13 +1,13 @@
-package kadai4.dao;
+package bulletinboardsystem.dao;
 
-import static kadai4.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import kadai4.beans.Comment;
-import kadai4.exception.SQLRuntimeException;
+import bulletinboardsystem.beans.Comment;
+import bulletinboardsystem.exception.SQLRuntimeException;
 
 public class CommentDao {
 

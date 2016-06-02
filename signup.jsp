@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1>ユーザー新規登録</h1>
+<h2>ユーザー新規登録</h2>
 
 <div class="main-contents">
 
@@ -20,7 +20,7 @@
 	<div class="errorMessages">
 		<ul>
 			<c:forEach items="${errorMessages}" var="message">
-				<h3><c:out value="${message}"/></h3>
+				<h1><c:out value="${message}"/></h1>
 			</c:forEach>
 		</ul>
 	</div>
@@ -37,7 +37,7 @@
 	<br />
 
 	<label for="checkpassword">確認のため、パスワードをもう一度入力してください</label> <br />
-	<input name="checkpassword" type="password" id="checkpassword"/> <br />
+	<input name="checkpassword" id="checkpassword"/> <br />
 	<br />
 
 	<label for="name">名前(10文字以下)</label> <br />
@@ -59,6 +59,12 @@
 	</select><br /><br />
 
 	<input type="submit" value="登録" /> <br /><br />
+	<c:remove var="login_id" scope="session"/>
+	<c:remove var="password" scope="session"/>
+	<c:remove var="checkpassword" scope="session"/>
+	<c:remove var="name" scope="session"/>
+	<c:remove var="branch_id" scope="session"/>
+	<c:remove var="department_id" scope="session"/>
 </form>
 
 <a href="admin" >戻る</a>

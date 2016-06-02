@@ -9,23 +9,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import bulletinboardsystem.beans.Department;
+import bulletinboardsystem.beans.UserMessage;
 import bulletinboardsystem.exception.SQLRuntimeException;
 
-public class DepartmentDao {
+public class CategoryDao {
 
-	public List<Department> getDepartments(Connection connection, int num) {
+	public List<UserMessage> getCategories(Connection connection, int num) {
 
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM kadai4.departments ");
-			sql.append("ORDER BY id ASC limit " + num);
+			sql.append("SELECT DISTINCT category FROM kadai4.contributions ");
+			sql.append("ORDER BY created DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
 			ResultSet rs = ps.executeQuery();
-			List<Department> ret = toDepartmentList(rs);
+
+			List<UserMessage> ret = toUserMessageList(rs);
 
 			return ret;
 		} catch (SQLException e) {
@@ -35,20 +36,18 @@ public class DepartmentDao {
 		}
 	}
 
-	private List<Department> toDepartmentList(ResultSet rs) throws SQLException {
+	private List<UserMessage> toUserMessageList(ResultSet rs) throws SQLException {
 
-		List<Department> ret = new ArrayList<Department>();
+		List<UserMessage> ret = new ArrayList<UserMessage>();
 		try {
 			while (rs.next()) {
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
+				String category = rs.getString("category");
 
-				Department department = new Department();
+				UserMessage message = new UserMessage();
 
-				department.setId(id);
-				department.setName(name);
+				message.setCategory(category);
 
-				ret.add(department);
+				ret.add(message);
 			}
 			return ret;
 		} finally {

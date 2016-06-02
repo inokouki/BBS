@@ -1,13 +1,13 @@
-package kadai4.service;
+package bulletinboardsystem.service;
 
-import static kadai4.utils.CloseableUtil.*;
-import static kadai4.utils.DBUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.DBUtil.*;
 
 import java.sql.Connection;
 import java.util.List;
 
-import kadai4.beans.Department;
-import kadai4.dao.DepartmentDao;
+import bulletinboardsystem.beans.Department;
+import bulletinboardsystem.dao.DepartmentDao;
 
 public class DepartmentService {
 

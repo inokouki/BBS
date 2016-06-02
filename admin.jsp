@@ -14,9 +14,9 @@
 
 <c:if test="${ loginUser.departmentId == 1}">
 
-<h2><a href="signup">ユーザー新規登録</a>
-<a href="./" >ホーム</a>
-<br /><br /><br /></h2>
+<h2><a href="signup">ユーザー新規登録</a></h2>
+<h2><a href="./" >ホーム</a></h2>
+<br /><br /><br />
 
 <div class="admin">
 	<c:forEach items="${users}" var="message">
@@ -33,6 +33,9 @@
 					<form action="edit" method="get">
 						<input type="submit" value="ユーザー情報の編集" >
 						<input name="editid" type="hidden" id="editid" value="${message.id}">
+						<input name="editloginId" type="hidden" id="editloginId" value="${message.loginId}">
+						<input name="editpassword" type="hidden" id="editpassword" value="${message.password}">
+						<input name="editname" type="hidden" id="editname" value="${message.name}">
 					</form>
 
 					<c:if test="${ message.available  == 1}">

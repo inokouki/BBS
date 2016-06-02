@@ -1,4 +1,4 @@
-package kadai4.controller;
+package bulletinboardsystem.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kadai4.beans.User;
-import kadai4.service.AdminService;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.service.AdminService;
 
 @WebServlet(urlPatterns = { "/admin" })
 public class AdminServlet extends HttpServlet {
@@ -35,6 +35,8 @@ public class AdminServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
+		request.setCharacterEncoding("UTF-8");
+
 		admindeletestr = request.getParameter("delete");
 		admineditstr = request.getParameter("stop");
 
@@ -50,6 +52,6 @@ public class AdminServlet extends HttpServlet {
 		}
 
 
-		response.sendRedirect("/Kadai4/admin");
+		response.sendRedirect("admin");
 	}
 }

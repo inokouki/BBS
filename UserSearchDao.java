@@ -1,6 +1,6 @@
-package kadai4.dao;
+package bulletinboardsystem.dao;
 
-import static kadai4.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import kadai4.beans.SearchMessage;
-import kadai4.exception.SQLRuntimeException;
+import org.apache.commons.lang.StringUtils;
+
+import bulletinboardsystem.beans.SearchMessage;
+import bulletinboardsystem.exception.SQLRuntimeException;
 
 public class UserSearchDao {
 
@@ -23,36 +25,43 @@ public class UserSearchDao {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM kadai4.contributions ");
 
-			if (!searchCategory.isEmpty() && searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) { // 1,0,0
+			if (!StringUtils.isEmpty(searchCategory) && StringUtils.isEmpty(searchTimeBefore) &&
+					StringUtils.isEmpty(searchTimeAfter)) { // 1,0,0
 				sql.append("WHERE ");
 				sql.append("category = \"" + searchCategory + "\" ");
 
-			} else if (searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 0,1,1
+			} else if (StringUtils.isEmpty(searchCategory) && !StringUtils.isEmpty(searchTimeBefore) &&
+					!StringUtils.isEmpty(searchTimeAfter)) { // 0,1,1
 				sql.append("WHERE created BETWEEN \"");
 				sql.append(searchTimeBefore + " 00:00:00\" AND \"" + searchTimeAfter + " 23:59:59\" " );
 
-			} else if (!searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 1,1,1
+			} else if (!StringUtils.isEmpty(searchCategory) && !StringUtils.isEmpty(searchTimeBefore) &&
+					!StringUtils.isEmpty(searchTimeAfter)) { // 1,1,1
 				sql.append("WHERE ");
 				sql.append("category = \"" + searchCategory + "\" ");
 				sql.append("AND ");
 				sql.append("created BETWEEN \"");
 				sql.append(searchTimeBefore + " 00:00:00\" AND \"" + searchTimeAfter + " 23:59:59\" " );
 
-			} else if (!searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) { // 1,1,0
+			} else if (!StringUtils.isEmpty(searchCategory) && !StringUtils.isEmpty(searchTimeBefore) &&
+					StringUtils.isEmpty(searchTimeAfter)) { // 1,1,0
 				sql.append("WHERE ");
 				sql.append("category = \"" + searchCategory + "\" AND ");
 				sql.append("created > \"" + searchTimeBefore + " 00:00:00\" ");
 
-			} else if (!searchCategory.isEmpty() && searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 1,0,1
+			} else if (!StringUtils.isEmpty(searchCategory) && StringUtils.isEmpty(searchTimeBefore) &&
+					!StringUtils.isEmpty(searchTimeAfter)) { // 1,0,1
 				sql.append("WHERE ");
 				sql.append("category = \"" + searchCategory + "\" AND ");
 				sql.append("created < \"" + searchTimeAfter + " 00:00:00\" ");
 
-			} else if (searchCategory.isEmpty() && !searchTimeBefore.isEmpty() && searchTimeAfter.isEmpty()) { // 0,1,0
+			} else if (StringUtils.isEmpty(searchCategory) && !StringUtils.isEmpty(searchTimeBefore) &&
+					StringUtils.isEmpty(searchTimeAfter)) { // 0,1,0
 				sql.append("WHERE ");
 				sql.append("created > \"" + searchTimeBefore + " 00:00:00\" ");
 
-			} else if (searchCategory.isEmpty() && searchTimeBefore.isEmpty() && !searchTimeAfter.isEmpty()) { // 0,0,1
+			} else if (StringUtils.isEmpty(searchCategory) && StringUtils.isEmpty(searchTimeBefore) &&
+					!StringUtils.isEmpty(searchTimeAfter)) { // 0,0,1
 				sql.append("WHERE ");
 				sql.append("created < \"" + searchTimeAfter + " 00:00:00\" ");
 

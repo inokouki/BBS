@@ -1,15 +1,15 @@
-package kadai4.service;
+package bulletinboardsystem.service;
 
-import static kadai4.utils.CloseableUtil.*;
-import static kadai4.utils.DBUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.DBUtil.*;
 
 import java.sql.Connection;
 import java.util.List;
 
-import kadai4.beans.User;
-import kadai4.dao.EditAvailableDao;
-import kadai4.dao.UserAdminDao;
-import kadai4.dao.UserDao;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.dao.EditAvailableDao;
+import bulletinboardsystem.dao.UserAdminDao;
+import bulletinboardsystem.dao.UserDao;
 
 public class AdminService {
 

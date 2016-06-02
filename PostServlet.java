@@ -1,4 +1,4 @@
-package kadai4.controller;
+package bulletinboardsystem.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import kadai4.beans.Message;
-import kadai4.beans.User;
-import kadai4.service.MessageService;
+import bulletinboardsystem.beans.Message;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.service.MessageService;
 
 @WebServlet(urlPatterns = { "/post" })
 public class PostServlet extends HttpServlet {

@@ -11,13 +11,13 @@
 </head>
 <body>
 
-<h1>新規投稿画面</h1><br />
+<h2>新規投稿画面</h2><br />
 
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
 			<c:forEach items="${errorMessages}" var="message">
-				<h3><c:out value="${message}" /></h3>
+				<h1><c:out value="${message}" /></h1>
 			</c:forEach>
 		</ul>
 	</div>
@@ -38,6 +38,9 @@
 	<br />
 	<br />
 	<input type="submit" value="投稿する">
+	<c:remove var="title" scope="session"/>
+	<c:remove var="text" scope="session"/>
+	<c:remove var="category" scope="session"/>
 </form>
 
 <a href="./" >戻る</a>

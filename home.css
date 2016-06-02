@@ -1,26 +1,20 @@
-h2 {
-    color: black;
-    background: #d5ffaf;
+html {
+	background-image: url(8RPHFpQk.png);
+	background-position: center;
+	font-weight: bold;
 }
-h3 {
-    color: red;
-    background: #d5ffaf;
+textarea {
+	solid: 3px black;
 }
-h4{
-	font-size: xx-large;
-	color: black;
+h1 {
+	color: #b80000;
 }
-p {
-    color: blue;
+div.errorMessages {
+	position: center;
 }
-a {
-	color: blue;
-	background: #d5ffaf;
+div.contribution {
+	position: center;
 }
-div {
-    background: #d5ffaf;
-}
-form{
-	border: black;
-	background: #d5ffaf;
+div.comment {
+	position: center;
 }

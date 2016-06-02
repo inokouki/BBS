@@ -1,4 +1,4 @@
-package kadai4.controller;
+package bulletinboardsystem.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import kadai4.beans.Branch;
-import kadai4.beans.Department;
-import kadai4.beans.User;
-import kadai4.service.BranchService;
-import kadai4.service.DepartmentService;
-import kadai4.service.EditService;
+import bulletinboardsystem.beans.Branch;
+import bulletinboardsystem.beans.Department;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.service.BranchService;
+import bulletinboardsystem.service.DepartmentService;
+import bulletinboardsystem.service.EditService;
 
 @WebServlet(urlPatterns = { "/edit" })
 public class EditServlet extends HttpServlet {
@@ -30,6 +30,11 @@ public class EditServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+
+		request.setCharacterEncoding("UTF-8");
+
+		request.setAttribute("loginId", request.getParameter("editloginId"));
+		request.setAttribute("name", request.getParameter("editname"));
 
 		inputid = request.getParameter("editid");
 
@@ -53,7 +58,7 @@ public class EditServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 
-		String loginid = request.getParameter("login_id");
+		String login_id = request.getParameter("login_id");
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		String branchid = request.getParameter("branch_id");
@@ -61,7 +66,6 @@ public class EditServlet extends HttpServlet {
 
 		if (editflag == false) {
 			edituserid = Integer.parseInt(inputid);
-			System.out.println("[EditServlet]edituserid:" + edituserid);
 			editflag = true;
 		}
 
@@ -73,19 +77,23 @@ public class EditServlet extends HttpServlet {
 			edituser.setLoginId(request.getParameter("login_id"));
 			edituser.setPassword(request.getParameter("password"));
 			edituser.setName(request.getParameter("name"));
-			edituser.setDepartmentId(request.getParameter("branch_id"));
+			edituser.setBranchId(request.getParameter("branch_id"));
 			edituser.setDepartmentId(request.getParameter("department_id"));
 
-			System.out.println("[EditServlet]edituser:" + edituser);
-
-			new EditService().editer(edituserid, loginid, password, name, branchid, departmentid, edituser);
+			new EditService().editer(edituserid, login_id, password, name, branchid, departmentid, edituser);
 
 			inputid = null;
 			editflag = false;
 
-			response.sendRedirect("/Kadai4/admin");
+			response.sendRedirect("admin");
 		} else {
 			session.setAttribute("errorMessages", messages);
+			session.setAttribute("loginId", login_id);
+			session.setAttribute("password", password);
+			session.setAttribute("name", name);
+			session.setAttribute("branch_id", branchid);
+			session.setAttribute("department_id", departmentid);
+
 			response.sendRedirect("edit");
 		}
 	}
@@ -98,9 +106,6 @@ public class EditServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String branchid = request.getParameter("branch_id");
 		String departmentid = request.getParameter("department_id");
-
-		System.out.println("pass:" + password);
-		System.out.println("check:" + checkpassword);
 
 		if (StringUtils.isEmpty(loginid) == true) {
 			messages.add("・ログインIDを入力してください");
@@ -117,7 +122,7 @@ public class EditServlet extends HttpServlet {
 			} else if (StringUtils.length(password) > 255) {
 				messages.add("・パスワードは255文字以下です");
 			}
-			if (password != checkpassword || (password != null && checkpassword == null)) {
+			if (!(password.equals(checkpassword)) || (password != null && checkpassword == null)) {
 				messages.add("・パスワードが一致しません");
 			}
 		}

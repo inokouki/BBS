@@ -1,4 +1,4 @@
-package kadai4.beans;
+package bulletinboardsystem.beans;
 
 import java.io.Serializable;
 

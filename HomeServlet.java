@@ -1,4 +1,4 @@
-package kadai4.controller;
+package bulletinboardsystem.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,16 +13,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import kadai4.beans.Comment;
-import kadai4.beans.SearchMessage;
-import kadai4.beans.User;
-import kadai4.beans.UserComment;
-import kadai4.beans.UserMessage;
-import kadai4.service.AdminDeleteService;
-import kadai4.service.CommentService;
-import kadai4.service.HomeService;
-import kadai4.service.MessageSearchService;
-import kadai4.service.MessageService;
+import bulletinboardsystem.beans.Comment;
+import bulletinboardsystem.beans.SearchMessage;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.beans.UserComment;
+import bulletinboardsystem.beans.UserMessage;
+import bulletinboardsystem.service.AdminDeleteService;
+import bulletinboardsystem.service.CategoryService;
+import bulletinboardsystem.service.CommentService;
+import bulletinboardsystem.service.HomeService;
+import bulletinboardsystem.service.MessageSearchService;
+import bulletinboardsystem.service.MessageService;
 
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class HomeServlet extends HttpServlet {
@@ -30,6 +31,7 @@ public class HomeServlet extends HttpServlet {
 	private static String searchCategory=null, searchTimeBefore = null, searchTimeAfter = null, deletestr = null;
 	private static String conname = null;
 	int loginbranchid;
+	private int flag = 0;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,23 +40,93 @@ public class HomeServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 		searchCategory = request.getParameter("searchCategory");
-		searchTimeBefore = request.getParameter("searchTimeBefore");
-		searchTimeAfter = request.getParameter("searchTimeAfter");
 		deletestr = request.getParameter("delete");
+
+
+		if (flag == 0) {
+			flag = 1;
+		} else {
+			String searchTimeBeforeYear = request.getParameter("searchTimeBeforeYear");
+			String searchTimeBeforeMonth = request.getParameter("searchTimeBeforeMonth");
+			String searchTimeBeforeDay = request.getParameter("searchTimeBeforeDay");
+			String searchTimeAfterYear = request.getParameter("searchTimeAfterYear");
+			String searchTimeAfterMonth = request.getParameter("searchTimeAfterMonth");
+			String searchTimeAfterDay = request.getParameter("searchTimeAfterDay");
+
+			if ( !StringUtils.isEmpty(searchTimeBeforeYear) && !StringUtils.isEmpty(searchTimeBeforeMonth) &&
+					!StringUtils.isEmpty(searchTimeBeforeDay) ) {
+				searchTimeBefore = searchTimeBeforeYear + "-" + searchTimeBeforeMonth + "-" +
+					searchTimeBeforeDay;
+
+			} else if ( !(StringUtils.isEmpty(searchTimeBeforeYear) && StringUtils.isEmpty(searchTimeBeforeMonth) &&
+					StringUtils.isEmpty(searchTimeBeforeDay))) {
+				List<String> searchmessages = new ArrayList<String>();
+				searchmessages.add("・入力は\"年月日\"全て選択してください");
+				request.setAttribute("errorMessages", searchmessages);
+
+			} else {
+				searchTimeBefore = "";
+			}
+
+			if ( !StringUtils.isEmpty(searchTimeAfterYear) && !StringUtils.isEmpty(searchTimeAfterMonth) &&
+					!StringUtils.isEmpty(searchTimeAfterDay) ) {
+				searchTimeAfter = searchTimeAfterYear + "-" + searchTimeAfterMonth + "-" +
+					searchTimeAfterDay;
+
+			} else if ( !(StringUtils.isEmpty(searchTimeAfterYear) && StringUtils.isEmpty(searchTimeAfterMonth) &&
+					StringUtils.isEmpty(searchTimeAfterDay))) {
+				List<String> searchmessages = new ArrayList<String>();
+				searchmessages.add("・入力は\"年月日\"全て選択してください");
+				request.setAttribute("errorMessages", searchmessages);
+
+			} else {
+				searchTimeAfter = "";
+			}
+
+			if ( !StringUtils.isEmpty(searchTimeBefore) && !StringUtils.isEmpty(searchTimeAfter)) {
+				int beforedate, afterdate;
+				List<String> searchmessages = new ArrayList<String>();
+
+				beforedate = Integer.parseInt(searchTimeBeforeYear + searchTimeBeforeMonth + searchTimeBeforeDay);
+				afterdate = Integer.parseInt(searchTimeAfterYear + searchTimeAfterMonth + searchTimeAfterDay);
+
+				if (afterdate - beforedate < 0) {
+					searchmessages.add("・日付の入力に異常があります");
+					request.setAttribute("errorMessages", searchmessages);
+				}
+
+			}
+		}
 
 		User loginuser = (User) request.getSession().getAttribute("loginUser");
 
 		List<UserMessage> contributions = new MessageService().getMessage();
 		List<UserComment> comments = new CommentService().getComment();
 		List<User> bracons = new HomeService().getUser();
-
+		List<UserMessage> concategories = new CategoryService().getSearchCategory();
 
 		if (searchCategory != null || searchTimeBefore != null || searchTimeAfter != null) {
 			List<SearchMessage> searches = new MessageSearchService().getMessage(searchCategory,
 					searchTimeBefore, searchTimeAfter);
+
+			String searchTimeBeforeYear = request.getParameter("searchTimeBeforeYear");
+			String searchTimeBeforeMonth = request.getParameter("searchTimeBeforeMonth");
+			String searchTimeBeforeDay = request.getParameter("searchTimeBeforeDay");
+			String searchTimeAfterYear = request.getParameter("searchTimeAfterYear");
+			String searchTimeAfterMonth = request.getParameter("searchTimeAfterMonth");
+			String searchTimeAfterDay = request.getParameter("searchTimeAfterDay");
 			request.setAttribute("searches", searches);
+
+			request.setAttribute("searchTimeBeforeYear", searchTimeBeforeYear);
+			request.setAttribute("searchTimeBeforeMonth", searchTimeBeforeMonth);
+			request.setAttribute("searchTimeBeforeDay", searchTimeBeforeDay);
+			request.setAttribute("searchTimeAfterYear", searchTimeAfterYear);
+			request.setAttribute("searchTimeAfterMonth", searchTimeAfterMonth);
+			request.setAttribute("searchTimeAfterDay", searchTimeAfterDay);
 		}
 
+		request.setAttribute("searchCategory", searchCategory);
+		request.setAttribute("categories", concategories);
 		request.setAttribute("contributions", contributions);
 		request.setAttribute("comments", comments);
 		request.setAttribute("loginUser", loginuser);
@@ -96,10 +168,14 @@ public class HomeServlet extends HttpServlet {
 		} else {
 			int deleteid = Integer.parseInt(deletestr);
 
-			if (conname.length() == 0) {
+			System.out.println(deleteid);
+
+			if (StringUtils.length(conname) == 0) {
 				CommentService.deleteUser(deleteid);
 			} else {
 				boolean admincheck = AdminDeleteService.getCheck(conname, loginbranchid);
+
+				System.out.println(admincheck);
 
 				if (admincheck == true) {
 					CommentService.deleteUser(deleteid);
@@ -116,18 +192,23 @@ public class HomeServlet extends HttpServlet {
 	private boolean isValid(HttpServletRequest request, List<String> comments) {
 
 		String comment = request.getParameter("comment");
+		String searchreset = request.getParameter("searchReset");
 
 		int error = 0;
 
-		if (searchCategory == null && searchTimeBefore == null && searchTimeAfter == null) {
-			if (StringUtils.isEmpty(comment) == true && deletestr == null) {
+		if (StringUtils.isEmpty(searchCategory) && StringUtils.isEmpty(searchTimeBefore) &&
+				StringUtils.isEmpty(searchTimeAfter)) {
+
+			if (StringUtils.isEmpty(comment) && StringUtils.isEmpty(deletestr) ) {
 				comments.add("・コメント文を入力してください");
-			} else if (comment.length() > 1000) {
+			} else if (comment.length() > 500) {
 				comments.add("・コメント文は500文字以下です");
 			}
 		}
 
-		if (searchCategory != null || (searchTimeBefore != null && searchTimeAfter != null)) {
+		if ( (!StringUtils.isEmpty(searchCategory) ||
+				(!StringUtils.isEmpty(searchTimeBefore) && StringUtils.isEmpty(searchTimeAfter)))
+				|| searchreset.equals("1")) {
 			comments.removeAll(comments);
 			error = 1;
 		}

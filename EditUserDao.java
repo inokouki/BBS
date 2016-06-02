@@ -1,6 +1,6 @@
-package kadai4.dao;
+package bulletinboardsystem.dao;
 
-import static kadai4.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import kadai4.beans.User;
-import kadai4.exception.SQLRuntimeException;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.exception.SQLRuntimeException;
 
 public class EditUserDao {
 
@@ -97,8 +97,6 @@ public class EditUserDao {
 			sql.append(", department_id=" + departmentid);
 			sql.append(", modified=CURRENT_TIMESTAMP");
 			sql.append(" WHERE id=" + editid);
-
-			System.out.println("[EditUserDao]sql:" + sql);
 
 			ps = connection.prepareStatement(sql.toString());
 

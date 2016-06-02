@@ -1,13 +1,13 @@
-package kadai4.dao;
+package bulletinboardsystem.dao;
 
-import static kadai4.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import kadai4.exception.SQLRuntimeException;
+import bulletinboardsystem.exception.SQLRuntimeException;
 
 public class AdminDeleteDao {
 
@@ -41,8 +41,19 @@ public class AdminDeleteDao {
 				String branchid = rs.getString("branch_id");
 				String departmentid = rs.getString("department_id");
 
+				System.out.println("loginid:" + loginid);
+				System.out.println("conname:" + conname);
+				System.out.println("branchid:" + branchid);
+				System.out.println("loginbranchid:" + loginbranchid);
+				System.out.println("departmentid:" + departmentid);
+
+				System.out.println("1:" + conname.equals(loginid));
+				System.out.println("2:" + String.valueOf(loginbranchid).equals(branchid));
+				System.out.println("3:" + (departmentid == "4"));
+
+
 				if (conname.equals(loginid) && String.valueOf(loginbranchid).equals(branchid) &&
-						departmentid == "4") {
+						departmentid.equals("4")) {
 					return true;
 				}
 

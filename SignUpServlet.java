@@ -1,4 +1,4 @@
-package kadai4.controller;
+package bulletinboardsystem.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import kadai4.beans.Branch;
-import kadai4.beans.Department;
-import kadai4.beans.User;
-import kadai4.service.BranchService;
-import kadai4.service.DepartmentService;
-import kadai4.service.UserService;
+import bulletinboardsystem.beans.Branch;
+import bulletinboardsystem.beans.Department;
+import bulletinboardsystem.beans.User;
+import bulletinboardsystem.service.BranchService;
+import bulletinboardsystem.service.DepartmentService;
+import bulletinboardsystem.service.UserService;
 
 @WebServlet(urlPatterns = { "/signup" })
 public class SignUpServlet extends HttpServlet {
@@ -46,6 +46,7 @@ public class SignUpServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
+		request.setCharacterEncoding("UTF-8");
 
 		String login_id = request.getParameter("login_id");
 		String password = request.getParameter("password");
@@ -61,7 +62,7 @@ public class SignUpServlet extends HttpServlet {
 
 			new UserService().register(user);
 
-			response.sendRedirect("/Kadai4/admin");
+			response.sendRedirect("admin");
 		} else {
 			session.setAttribute("errorMessages", messages);
 			session.setAttribute("login_id", login_id);

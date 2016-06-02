@@ -1,15 +1,15 @@
-package kadai4.service;
+package bulletinboardsystem.service;
 
-import static kadai4.utils.CloseableUtil.*;
-import static kadai4.utils.DBUtil.*;
+import static bulletinboardsystem.utils.CloseableUtil.*;
+import static bulletinboardsystem.utils.DBUtil.*;
 
 import java.sql.Connection;
 import java.util.List;
 
-import kadai4.beans.Comment;
-import kadai4.beans.UserComment;
-import kadai4.dao.CommentDao;
-import kadai4.dao.UserCommentDao;
+import bulletinboardsystem.beans.Comment;
+import bulletinboardsystem.beans.UserComment;
+import bulletinboardsystem.dao.CommentDao;
+import bulletinboardsystem.dao.UserCommentDao;
 
 public class CommentService {
 
